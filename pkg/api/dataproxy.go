@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/grafana/grafana/pkg/api/cloudwatch"
@@ -85,11 +86,6 @@ func ProxyDataSourceRequest(c *middleware.Context) {
 		return
 	}
 
-	if ds.Type == m.DS_CLOUDWATCH {
-		cloudwatch.HandleRequest(c, ds)
-		return
-	}
-
 	if ds.Type == m.DS_INFLUXDB {
 		if c.Query("db") != ds.Database {
 			c.JsonApiErr(403, "Datasource is not configured to allow this database", nil)
@@ -97,15 +93,24 @@ func ProxyDataSourceRequest(c *middleware.Context) {
 		}
 	}
 
+	if ds.Type == m.DS_CLOUDWATCH {
+		cloudwatch.HandleRequest(c, ds)
+		return
+	}
+
 	targetUrl, _ := url.Parse(ds.Url)
-	if len(setting.DataProxyWhiteList) > 0 {
-		if _, exists := setting.DataProxyWhiteList[targetUrl.Host]; !exists {
-			c.JsonApiErr(403, "Data proxy hostname and ip are not included in whitelist", nil)
-			return
-		}
+	if !checkWhiteList(c, targetUrl.Host) {
+		return
 	}
 
 	proxyPath := c.Params("*")
+
+	if ds.Type == m.DS_PROMETHEUS {
+		if c.Req.Request.Method != http.MethodGet || !strings.HasPrefix(proxyPath, "api/") {
+			c.JsonApiErr(403, "GET is only allowed on proxied Prometheus datasource", nil)
+			return
+		}
+	}
 
 	if ds.Type == m.DS_ES {
 		if c.Req.Request.Method == "DELETE" {
@@ -156,4 +161,15 @@ func logProxyRequest(dataSourceType string, c *middleware.Context) {
 		"uri", c.Req.RequestURI,
 		"method", c.Req.Request.Method,
 		"body", body)
+}
+
+func checkWhiteList(c *middleware.Context, host string) bool {
+	if host != "" && len(setting.DataProxyWhiteList) > 0 {
+		if _, exists := setting.DataProxyWhiteList[host]; !exists {
+			c.JsonApiErr(403, "Data proxy hostname and ip are not included in whitelist", nil)
+			return false
+		}
+	}
+
+	return true
 }
