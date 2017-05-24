@@ -8,40 +8,37 @@
 		<i class="fa fa-chevron-left"></i>
 	</a>
 
-  <a class="navbar-page-btn" ng-click="ctrl.showSearch()" ng-class="{active: ctrl.isSearching}">
+  <a class="navbar-page-btn" ng-click="ctrl.showSearch()">
 		<i class="fa fa-search"></i>
 	</a>
 
-	<div ng-hide="ctrl.isSearching">
-		<div class="dropdown navbar-section-wrapper">
-			<a href="{{ctrl.section.url}}" class="navbar-page-btn" data-toggle="dropdown">
-				<i class="{{ctrl.section.icon}}" ng-show="ctrl.section.icon"></i>
-				<img ng-src="{{ctrl.section.iconUrl}}" ng-show="ctrl.section.iconUrl"></i>
-			{{ctrl.section.title}}
-			<i class="fa fa-caret-down"></i>
-			</a>
-			<ul class="navbar-dropdown-menu">
-				<li ng-repeat="navItem in ctrl.model.navItems" ng-class="{active: navItem.active}">
-					<a class="pointer" href="{{navItem.url}}" ng-click="ctrl.navItemClicked(navItem, $event)">
-						<i class="{{navItem.icon}}" ng-show="navItem.icon"></i>
-						{{navItem.title}}
-					</a>
-				</li>
-			</ul>
-		</div>
+  <div class="dropdown navbar-section-wrapper">
+    <a href="{{ctrl.section.url}}" class="navbar-page-btn" data-toggle="dropdown">
+      <i class="{{ctrl.section.icon}}" ng-show="ctrl.section.icon"></i>
+      <img ng-src="{{ctrl.section.iconUrl}}" ng-show="ctrl.section.iconUrl"></i>
+      {{ctrl.section.title}}
+      <i class="fa fa-caret-down"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-menu--navbar">
+      <li ng-repeat="navItem in ctrl.model.navItems" ng-class="{active: navItem.active}">
+        <a class="pointer" href="{{navItem.url}}" ng-click="ctrl.navItemClicked(navItem, $event)">
+          <i class="{{navItem.icon}}" ng-show="navItem.icon"></i>
+          {{navItem.title}}
+        </a>
+      </li>
+    </ul>
+  </div>
 
-		<!-- <ul class="nav pull&#45;left" style="margin&#45;left: 20px"> -->
-		<!-- 	<li ng&#45;repeat="navItem in ctrl.model.navItems" ng&#45;class="{active: navItem.active}"> -->
-		<!-- 		<a class="pointer" href="{{navItem.url}}"> -->
-		<!-- 			{{navItem.title}} -->
-		<!-- 		</a> -->
-		<!-- 	</li> -->
-		<!-- </ul> -->
-		<!--  -->
+  <!-- <ul class="nav pull&#45;left" style="margin&#45;left: 20px"> -->
+  <!-- 	<li ng&#45;repeat="navItem in ctrl.model.navItems" ng&#45;class="{active: navItem.active}"> -->
+  <!-- 		<a class="pointer" href="{{navItem.url}}"> -->
+  <!-- 			{{navItem.title}} -->
+  <!-- 		</a> -->
+  <!-- 	</li> -->
+  <!-- </ul> -->
+  <!--  -->
 
-		<div ng-transclude></div>
-
-	</div>
+  <div ng-transclude></div>
 </div>
 
 <dashboard-search></dashboard-search>

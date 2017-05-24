@@ -4,12 +4,7 @@ import angular from 'angular';
 import _ from 'lodash';
 import moment from 'moment';
 
-import {
-  coreModule,
-  appEvents,
-  navModel,
-} from  'app/core/core';
-
+import {coreModule, appEvents, navModel} from  'app/core/core';
 import alertDef from './alert_def';
 
 export class AlertListCtrl {

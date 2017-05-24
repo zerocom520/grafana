@@ -10,14 +10,10 @@ import './menu';
 export class NavbarCtrl {
   model: any;
   section: any;
-  isSearching: boolean;
 
   /** @ngInject */
   constructor(private $scope, private $rootScope, private contextSrv) {
     this.section = this.model.section;
-
-    $rootScope.onAppEvent('show-dash-search', () => this.isSearching = true, $scope);
-    $rootScope.onAppEvent('hide-dash-search', () => this.isSearching = false, $scope);
   }
 
   showSearch() {

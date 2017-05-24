@@ -25,27 +25,27 @@ export class NavModel {
       navItems: [
         {
           title: 'Settings',
-          icon: 'fa fa-cog',
+          icon: 'fa fa-fw fa-cog',
           clickHandler: () => dashNav.openEditView('settings'),
         },
         {
           title: 'Templating',
-          icon: 'fa fa-code',
+          icon: 'fa fa-fw fa-code',
           clickHandler: () => dashNav.openEditView('templating'),
         },
         {
           title: 'Annotations',
           clickHandler: () => dashNav.openEditView('annotations'),
-          icon: 'fa fa-bolt'
+          icon: 'fa fa-fw fa-bolt'
         },
         {
           title: 'View JSON',
-          icon: 'fa fa-eye',
+          icon: 'fa fa-fw fa-eye',
           clickHandler: () => dashNav.viewJson(),
         },
         {
-          title: 'Save As',
-          icon: 'fa fa-save',
+          title: 'Save As ...',
+          icon: 'fa fa-fw fa-save',
           clickHandler: () => dashNav.saveDashboardAs(),
         },
       ]

@@ -64,10 +64,7 @@
   border-right: 1px solid $tight-form-border;
   background-color: $navbarButtonBackground;
   padding: 0.4rem 1.0rem 0.4rem 1rem;
-  margin: 0 4px 0 0;
-  box-shadow: 1px 1px 5px #040404;
-  background-image: linear-gradient(to bottom, #1f1f1f, #333333);
-  background-repeat: repeat-x;
+  min-height:: $navbarHeight;
 
   .fa-caret-down {
     font-size: 70%;
@@ -118,10 +115,7 @@
   background-color: $navbarButtonBackground;
   font-size: $font-size-lg;
   padding: 1rem 1rem 0.75rem 1rem;
-  margin: 0 4px 0 0;
-  box-shadow: 1px 1px 5px #040404;
-  background-image: linear-gradient(to bottom, #1f1f1f, #333333);
-  background-repeat: repeat-x;
+  min-height:: $navbarHeight;
 
   &:hover, &.active {
     background: $side-menu-bg;
@@ -151,50 +145,29 @@
   position: relative;
 }
 
-.navbar-dropdown-menu {
-  position: absolute;
+.dropdown-menu.dropdown-menu--navbar {
   top: 100%;
   width: 100%;
-  left: 0;
-  z-index: $zindex-dropdown;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.2s ease-out 0.0s;
-  float: left;
   min-width: 140px;
-  margin: 2px 0 0; // override default ul
-  list-style: none;
-  background: $side-menu-bg;
-  box-shadow: 1px 1px 5px #040404;
+  margin-top: 0px;
 
   li a {
-    display: block;
-    white-space: nowrap;
-    color: $text-muted;
     padding: $spacer/2 $spacer;
     border-left: 2px solid $side-menu-bg;
+    background: $side-menu-bg;
 
     i {
       display: inline-block;
-      padding-right: $spacer/2;
+      padding-right: 21px;
     }
 
     &:hover {
       @include left-brand-border-gradient();
-      color: $link-color;
+      color: $link-hover-color;
       background: $input-label-bg;
     }
   }
 }
-
-.open {
-  & > .navbar-dropdown-menu {
-    display: block;
-    opacity: 1;
-    visibility: visible;
-  }
-}
-
 
 .sidemenu-pinned {
   .navbar-brand-btn {
