@@ -27,6 +27,7 @@ type Scheme string
 const (
 	HTTP              Scheme = "http"
 	HTTPS             Scheme = "https"
+	SOCKET            Scheme = "socket"
 	DEFAULT_HTTP_ADDR string = "0.0.0.0"
 )
 
@@ -65,6 +66,7 @@ var (
 	HttpAddr, HttpPort string
 	SshPort            int
 	CertFile, KeyFile  string
+	SocketPath         string
 	RouterLogging      bool
 	DataProxyLogging   bool
 	StaticRootPath     string
@@ -158,7 +160,7 @@ var (
 	logger log.Logger
 
 	// Grafana.NET URL
-	GrafanaNetUrl string
+	GrafanaComUrl string
 
 	// S3 temp image store
 	S3TempImageStoreBucketUrl string
@@ -473,6 +475,10 @@ func NewConfigContext(args *CommandLineArgs) error {
 		CertFile = server.Key("cert_file").String()
 		KeyFile = server.Key("cert_key").String()
 	}
+	if server.Key("protocol").MustString("http") == "socket" {
+		Protocol = SOCKET
+		SocketPath = server.Key("socket").String()
+	}
 
 	Domain = server.Key("domain").MustString("localhost")
 	HttpAddr = server.Key("http_addr").MustString(DEFAULT_HTTP_ADDR)
@@ -509,7 +515,7 @@ func NewConfigContext(args *CommandLineArgs) error {
 
 	//  read data source proxy white list
 	DataProxyWhiteList = make(map[string]bool)
-	for _, hostAndIp := range security.Key("data_source_proxy_whitelist").Strings(" ") {
+	for _, hostAndIp := range util.SplitString(security.Key("data_source_proxy_whitelist").String()) {
 		DataProxyWhiteList[hostAndIp] = true
 	}
 
@@ -576,7 +582,11 @@ func NewConfigContext(args *CommandLineArgs) error {
 		log.Warn("require_email_validation is enabled but smpt is disabled")
 	}
 
-	GrafanaNetUrl = Cfg.Section("grafana_net").Key("url").MustString("https://grafana.com")
+	// check old key  name
+	GrafanaComUrl = Cfg.Section("grafana_net").Key("url").MustString("")
+	if GrafanaComUrl == "" {
+		GrafanaComUrl = Cfg.Section("grafana_com").Key("url").MustString("https://grafana.com")
+	}
 
 	imageUploadingSection := Cfg.Section("external_image_storage")
 	ImageUploadProvider = imageUploadingSection.Key("provider").MustString("internal")
