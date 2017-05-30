@@ -56,7 +56,6 @@
   margin: 2px 0 0; // override default ul
   list-style: none;
   background-color: $dropdownBackground;
-  border: 1px solid #ccc; // Fallback for IE7-8
   border: 1px solid $dropdownBorder;
 
   // Aligns the dropdown menu to right

@@ -226,8 +226,8 @@ $navbarButtonBackgroundHighlight: lighten($navbarBackground, 5%);
 
 // Sidemenu
 // -------------------------
-$side-menu-bg:            $body-bg;
-$side-menu-item-hover-bg: $dark-3;
+$side-menu-bg:            $navbarBackground;
+$side-menu-item-hover-bg: $input-label-bg;
 $side-menu-opacity:		  0.97;
 
 // Pagination

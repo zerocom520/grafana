@@ -74,7 +74,7 @@
   }
 
   &:hover {
-    background: $side-menu-bg;
+    background: $navbarButtonBackgroundHighlight;
   }
 
   img {
@@ -118,8 +118,7 @@
   min-height:: $navbarHeight;
 
   &:hover, &.active {
-    background: $side-menu-bg;
-    color: $link-color;
+    background: $navbarButtonBackgroundHighlight;
   }
 
   .fa-caret-down {
@@ -149,6 +148,7 @@
   top: 100%;
   min-width: 100%;
   margin-top: 0px;
+  border: 1px solid $tight-form-border;
 
   li a {
     padding: $spacer/2 $spacer;
@@ -163,7 +163,6 @@
     &:hover {
       @include left-brand-border-gradient();
       color: $link-hover-color;
-      background: $input-label-bg;
     }
   }
 }
