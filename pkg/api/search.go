@@ -2,6 +2,7 @@ package api
 
 import (
 	"strconv"
+	"time"
 
 	"github.com/grafana/grafana/pkg/bus"
 	"github.com/grafana/grafana/pkg/metrics"
@@ -10,6 +11,7 @@ import (
 )
 
 func Search(c *middleware.Context) {
+	time.Sleep(2 * time.Second)
 	query := c.Query("query")
 	tags := c.QueryStrings("tag")
 	starred := c.Query("starred")

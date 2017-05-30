@@ -1,0 +1,17 @@
+{
+  "type": "panel",
+  "name": "ScrollBug",
+  "id": "scrollbug",
+
+  "info": {
+    "author": {
+      "name": "Grafana Project",
+      "url": "https://grafana.com"
+},
+    "logos": {
+      "small": "img/icn-text-panel.svg",
+      "large": "img/icn-text-panel.svg"
+    }
+  }
+}
+
