@@ -42,7 +42,6 @@
 // Hover/focus
 .navbar .nav > li > a:focus,
 .navbar .nav > li > a:hover {
-  background-color: $navbarLinkBackgroundHover; // "transparent" is default to differentiate :hover/:focus from .active
   color: $navbarLinkColorHover;
   text-decoration: none;
 }
@@ -69,12 +68,13 @@
   .fa-caret-down {
     font-size: 70%;
   }
+
   .fa-chevron-left{
     display: none;
   }
 
   &:hover {
-    background: $side-menu-bg;
+    background: $navbarButtonBackgroundHighlight;
   }
 
   img {
@@ -109,7 +109,7 @@
   float: left;
   display: block;
   margin: 0;
-  font-size: 1.4em;
+  font-size: 1.4rem;
   border-right: 1px solid $tight-form-border;
   color: darken($link-color, 5%);
   background-color: $navbarButtonBackground;
@@ -118,8 +118,7 @@
   min-height:: $navbarHeight;
 
   &:hover, &.active {
-    background: $side-menu-bg;
-    color: $link-color;
+    background: $navbarButtonBackgroundHighlight;
   }
 
   .fa-caret-down {
@@ -190,17 +189,7 @@
   }
 }
 
-.sidemenu-open {
-  .navbar-brand-btn {
-    background: $side-menu-bg;
-  }
-}
-
 .navbar-section-wrapper {
   position: relative;
   float: left;
-
-  &.open .navbar-page-btn {
-    background: $side-menu-bg;
-  }
 }

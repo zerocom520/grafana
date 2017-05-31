@@ -18,6 +18,8 @@ export class SearchCtrl {
   showImport: boolean;
   dismiss: any;
   ignoreClose: any;
+  // triggers fade animation class
+  openCompleted: boolean;
 
   /** @ngInject */
   constructor(private $scope, private $location, private $timeout, private backendSrv, private contextSrv, private $rootScope) {
@@ -27,6 +29,7 @@ export class SearchCtrl {
 
   closeSearch() {
     this.isOpen = this.ignoreClose;
+    this.openCompleted = false;
   }
 
   openSearch(evt, payload) {
@@ -56,6 +59,7 @@ export class SearchCtrl {
     }
 
     this.$timeout(() => {
+      this.openCompleted = true;
       this.ignoreClose = false;
       this.giveSearchFocus = this.giveSearchFocus + 1;
       this.search();

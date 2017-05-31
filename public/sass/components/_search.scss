@@ -1,13 +1,20 @@
+.search-backdrop {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  top: $navbarHeight;
+  z-index: $zindex-modal-backdrop;
+  background-color: $black;
+  @include opacity(70);
+}
+
 .search-container {
-  left: 129px;
-  top: 0px;
-  z-index: 1000;
+  left: 78px;
+  top: 0;
+  right: 0;
+  z-index: ($zindex-modal-backdrop + 10);
   position: absolute;
-  width: 100%;
-  max-width: 1000px;
-  box-shadow: $search-shadow;
-  padding: 0 10px 10px 10px;
-  background: $side-menu-bg;
 
   .label-tag {
     margin-left: 6px;
@@ -19,25 +26,47 @@
 // Search
 .search-field-wrapper {
   width: 100%;
-  max-width: 700px;
+  display: flex;
+  background-color: $navbarButtonBackground;
 
   input {
-    width: 100%;
-    padding: 0.5rem 1.5rem 0.5rem 0;
+    max-width: 653px;
+    //padding: 0.5rem 1.5rem 0.5rem 0;
+    padding: 1rem 1rem 0.75rem 1rem;
     height: 51px;
     line-height: 51px;
     box-sizing: border-box;
     outline: none;
     background: $side-menu-bg;
+    background-color: $navbarButtonBackground;
+    flex-grow: 10;
   }
+}
 
-  button {
-    margin: 0 4px 0 0;
-  }
+.search-field-spacer {
+  flex-grow: 1;
+}
+.search-switches {
+  flex-grow: 1;
+  padding: 1rem 1rem 0.75rem 1rem;
+  white-space: nowrap;
+}
 
-  > span {
-    display: block;
-    overflow: hidden;
+.search-field-icon {
+  font-size: $font-size-lg;
+  padding: 1rem 1rem 0.75rem 1rem;
+}
+
+.search-dropdown {
+  display: flex;
+  max-width: 1100px;
+  visibility: none;
+  opacity: 0;
+
+  &--fade-in {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.3s;
   }
 }
 
@@ -46,6 +75,9 @@
   overflow: auto;
   display: block;
   line-height: 28px;
+  padding: $spacer;
+  background: $panel-bg;
+  flex-grow: 10;
 
   .selected {
     .search-result-tag {
@@ -74,7 +106,7 @@
     display: block;
     padding: 3px 10px;
     white-space: nowrap;
-    background-color: $panel-bg;
+    background-color: $tight-form-bg;
     margin-bottom: 4px;
     @include left-brand-border();
 
@@ -87,6 +119,7 @@
     }
 
     &:hover {
+      background-color: $tight-form-func-bg;
       @include left-brand-border-gradient();
     }
 
@@ -105,17 +138,15 @@
   }
 }
 
-.search-switches {
-  position: absolute;
-  top: 19px;
-  right: 21px;
-}
 
 .search-button-row {
-  padding-top: 20px;
+  padding: $spacer*2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 
   button, a {
-    margin-right: 10px;
+    margin-bottom: $spacer;
   }
 
   .search-button-row-explore-link {
