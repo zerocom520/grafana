@@ -11,7 +11,7 @@ import (
 )
 
 func Search(c *middleware.Context) {
-	time.Sleep(2 * time.Second)
+	time.Sleep(400 * time.Millisecond)
 	query := c.Query("query")
 	tags := c.QueryStrings("tag")
 	starred := c.Query("starred")

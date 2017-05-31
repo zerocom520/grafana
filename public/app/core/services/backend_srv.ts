@@ -8,6 +8,7 @@ import coreModule from 'app/core/core_module';
 export class BackendSrv {
   inFlightRequests = {};
   HTTP_REQUEST_CANCELLED = -1;
+  counter = 0;
 
   /** @ngInject */
   constructor(private $http, private alertSrv, private $rootScope, private $q, private $timeout, private contextSrv) {
@@ -150,6 +151,8 @@ export class BackendSrv {
       }
     }
 
+    this.counter += 1;
+    console.log('req started', this.counter, new Date());
     return this.$http(options).catch(err => {
       if (err.status === this.HTTP_REQUEST_CANCELLED) {
         throw {err, cancelled: true};
@@ -181,6 +184,9 @@ export class BackendSrv {
 
       throw err;
     }).finally(() => {
+      console.log('req completed', this.counter);
+      this.counter -= 1;
+
       // clean up
       if (options.requestId) {
         this.inFlightRequests[options.requestId].shift();

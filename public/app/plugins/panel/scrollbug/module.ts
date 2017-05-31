@@ -10,47 +10,58 @@ class ScrollBugPanelCtrl extends PanelCtrl {
   httpGet1 = '';
   httpGet2 = '';
   httpGet3 = '';
+  loading = false;
 
   /** @ngInject **/
-  constructor($scope, $injector, private backendSrv) {
+  constructor($scope, $injector, private backendSrv, private $q, private datasourceSrv, private timeSrv) {
     super($scope, $injector);
     this.events.on('refresh', this.onRefresh.bind(this));
-    this.events.on('render', this.onRender.bind(this));
   }
 
   onRefresh() {
-    this.render();
+    this.loading = true;
+    return this.makeRequest(1).then(() => {
+      console.log('all completed');
+    }).finally(() => {
+      this.loading = false;
+    });
   }
 
-  onRender() {
+  makeRequest(nr) {
     const options = {
       "url": "api/search",
       "method": "GET",
-      "requestId": "8A",
-      "retry": 0,
-      "timeout": {
-        "$$state": {
-          "status": 0
-        }
-      },
-      "headers": {
-        "X-Grafana-Org-Id": 1
-      }
+      "requestId": this.panel.id + '-' + nr,
     };
 
+    let range = this.timeSrv.timeRange();
+    let rangeRaw = range.raw;
+
     this.startTime = moment();
-    this.backendSrv.datasourceRequest(options).then((data) => {
-      this.httpGet1 += '<p>Http Get Call1 completed: ' + moment().diff(this.startTime).toString() + '</p>';
-    });
-    this.backendSrv.datasourceRequest(options).then(() => {
-      this.httpGet2 += '<p>Http Get Call2 completed: ' + moment().diff(this.startTime).toString() + '</p>';
-    });
+    return this.datasourceSrv.get(null).then(ds => {
+      return ds.query({
+        panelId: this.panel.id,
+        range: range,
+        rangeRaw: rangeRaw,
+        interval: '10s',
+        intervalMs: 10000,
+        targets: [
+          {target: 'apps.*.*.counters.requests.count'}
+        ],
+        maxDataPoints: 2000,
+        scopedVars: {},
+      });
 
-    this.backendSrv.datasourceRequest(options).then(() => {
-      this.httpGet3 += '<p>Http Get Call3 completed: ' + moment().diff(this.startTime).toString() + '</p>';
+      // return this.backendSrv.datasourceRequest(options).then(data => {
+      //   this['httpGet' + nr] += `<p>Http Get ${nr} completed: ${moment().diff(this.startTime).toString()}</p>`;
+      //   if (nr === 1) {
+      //     return this.$q.all([
+      //       this.makeRequest(2),
+      //       this.makeRequest(3),
+      //     ]);
+      //   }
+      // });
     });
-
-    this.renderingCompleted();
   }
 }
 

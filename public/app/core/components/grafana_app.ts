@@ -26,6 +26,23 @@ export class GrafanaCtrl {
       utilSrv.init();
 
       $scope.dashAlerts = alertSrv;
+      var counter = 0;
+      var lastCounter = 0;
+      setInterval(() => {
+        counter++;
+      }, 10);
+
+      setInterval(() => {
+        console.log('ticks: ', counter - lastCounter);
+        lastCounter = counter;
+      }, 1000);
+
+      let digest = 0;
+      $rootScope.$watch(function() {
+        console.log('digest: ' + digest++);
+      });
+
+      console.log('Start: ', new Date());
     };
 
     $scope.initDashboard = function(dashboardData, viewScope) {
