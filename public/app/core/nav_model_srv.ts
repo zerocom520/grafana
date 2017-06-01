@@ -34,6 +34,23 @@ export class NavModelSrv {
   }
 
   getDashboardNav(dashboard, dashNavCtrl) {
+    // special handling for snapshots
+    if (dashboard.meta.isSnapshot) {
+      return {
+        section: {
+          title: dashboard.title,
+          icon: 'icon-gf icon-gf-snapshot'
+        },
+        navItems: [
+          {
+            title: 'Go to original dashboard',
+            icon: 'fa fa-fw fa-external-link',
+            url: dashboard.snapshot.originalUrl,
+          }
+        ]
+      };
+    }
+
     var navItems = [];
 
     if (dashboard.meta.canEdit) {
