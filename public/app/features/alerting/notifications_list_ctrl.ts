@@ -4,10 +4,7 @@ import angular from 'angular';
 import _ from 'lodash';
 import config from 'app/core/config';
 
-import {
-  coreModule,
-  navModel,
-} from  'app/core/core';
+import {coreModule} from  'app/core/core';
 
 
 export class AlertNotificationsListCtrl {
@@ -15,9 +12,9 @@ export class AlertNotificationsListCtrl {
   navModel: any;
 
   /** @ngInject */
-  constructor(private backendSrv, private $scope) {
+  constructor(private backendSrv, private $scope, navModelSrv) {
     this.loadNotifications();
-    this.navModel = navModel.getAlertingNav(1);
+    this.navModel = navModelSrv.getAlertingNav(1);
   }
 
   loadNotifications() {

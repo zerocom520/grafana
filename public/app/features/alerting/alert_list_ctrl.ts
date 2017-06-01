@@ -4,7 +4,7 @@ import angular from 'angular';
 import _ from 'lodash';
 import moment from 'moment';
 
-import {coreModule, appEvents, navModel} from  'app/core/core';
+import {coreModule, appEvents} from  'app/core/core';
 import alertDef from './alert_def';
 
 export class AlertListCtrl {
@@ -22,8 +22,8 @@ export class AlertListCtrl {
   navModel: any;
 
   /** @ngInject */
-  constructor(private backendSrv, private $location, private $scope) {
-    this.navModel = navModel.getAlertingNav(0);
+  constructor(private backendSrv, private $location, private $scope, navModelSrv) {
+    this.navModel = navModelSrv.getAlertingNav(0);
 
     var params = $location.search();
     this.filters.state = params.state || null;
