@@ -49,6 +49,20 @@ export class NavModelSrv {
     };
   }
 
+  getPlaylistsNav(subPage) {
+    return {
+      section: {
+        title: 'Playlists',
+        url: 'playlists',
+        icon: 'fa fa-fw fa-film'
+      },
+      menu: [
+        {title: 'List view', active: subPage === 0, url: '/playlists', icon: 'fa fa-list-ul'},
+        {title: 'Add Playlist', active: subPage === 1, url: '/playlists/create', icon: 'fa fa-plus'},
+      ]
+    };
+  }
+
   getProfileNav() {
     return {
       section: {
