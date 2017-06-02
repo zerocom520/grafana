@@ -41,6 +41,9 @@ function (angular, _, $, config) {
         self.registerPanel(payload.scope);
       });
 
+      // this marks changes to location during this digest cycle as not to add history item
+      // dont want url changes like adding orgId to add browser history
+      $location.replace();
       this.update(this.getQueryStringState());
       this.expandRowForPanel();
     }
