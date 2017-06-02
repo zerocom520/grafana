@@ -105,10 +105,14 @@ export function grafanaAppDirective(playlistSrv, contextSrv) {
         if (pageClass) {
           body.removeClass(pageClass);
         }
-        pageClass = data.$$route.pageClass;
-        if (pageClass) {
-          body.addClass(pageClass);
+
+        if (data.$$route) {
+          pageClass = data.$$route.pageClass;
+          if (pageClass) {
+            body.addClass(pageClass);
+          }
         }
+
         $("#tooltip, .tooltip").remove();
 
         // check for kiosk url param

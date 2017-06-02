@@ -5,7 +5,8 @@ import coreModule from 'app/core/core_module';
 export interface NavModelItem {
   title: string;
   url: string;
-  iconL: string;
+  icon?: string;
+  iconUrl?: string;
 }
 
 export interface NavModel {
@@ -24,7 +25,7 @@ export class NavModelSrv {
     return {
       section: {
         title: 'Alerting',
-        url: '/plugins',
+        url: 'plugins',
         icon: 'icon-gf icon-gf-alert'
       },
       menu: [
@@ -38,7 +39,7 @@ export class NavModelSrv {
     return {
       section: {
         title: 'Data Sources',
-        url: '/datasources',
+        url: 'datasources',
         icon: 'icon-gf icon-gf-datasources'
       },
       menu: [
@@ -52,8 +53,19 @@ export class NavModelSrv {
     return {
       section: {
         title: 'User Profile',
-        url: '/profile',
+        url: 'profile',
         icon: 'fa fa-fw fa-user'
+      },
+      menu: []
+    };
+  }
+
+  getNotFoundNav() {
+    return {
+      section: {
+        title: 'Page',
+        url: '',
+        icon: 'fa fa-fw fa-warning'
       },
       menu: []
     };
@@ -63,7 +75,7 @@ export class NavModelSrv {
     return {
       section: {
         title: 'Organization',
-        url: '/org',
+        url: 'org',
         icon: 'icon-gf icon-gf-users'
       },
       menu: [
@@ -71,6 +83,17 @@ export class NavModelSrv {
         {title: 'Org Users', active: subPage === 1, url: '/org/users', icon: 'fa fa-fw fa-users'},
         {title: 'API Keys', active: subPage === 2, url: '/org/apikeys', icon: 'fa fa-fw fa-key'},
       ]
+    };
+  }
+
+  getPluginsNav() {
+    return {
+      section: {
+        title: 'Plugins',
+        url: 'plugins',
+        icon: 'icon-gf icon-gf-apps'
+      },
+      menu: []
     };
   }
 
