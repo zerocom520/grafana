@@ -9,7 +9,8 @@ export interface NavModelItem {
 }
 
 export interface NavModel {
-  items: NavModelItem[];
+  section: NavModelItem;
+  menu: NavModelItem[];
 }
 
 export class NavModelSrv {
@@ -26,9 +27,49 @@ export class NavModelSrv {
         url: '/plugins',
         icon: 'icon-gf icon-gf-alert'
       },
-      navItems: [
+      menu: [
         {title: 'Alert List', active: subPage === 0, url: 'alerting/list', icon: 'fa fa-list-ul'},
         {title: 'Notifications', active: subPage === 1, url: 'alerting/notifications', icon: 'fa fa-bell-o'},
+      ]
+    };
+  }
+
+  getDatasourceNav(subPage) {
+    return {
+      section: {
+        title: 'Data Sources',
+        url: '/datasources',
+        icon: 'icon-gf icon-gf-datasources'
+      },
+      menu: [
+        {title: 'List view', active: subPage === 0, url: '/datasources', icon: 'fa fa-list-ul'},
+        {title: 'Add data source', active: subPage === 1, url: '/datasources/new', icon: 'fa fa-plus'},
+      ]
+    };
+  }
+
+  getProfileNav() {
+    return {
+      section: {
+        title: 'User Profile',
+        url: '/profile',
+        icon: 'fa fa-fw fa-user'
+      },
+      menu: []
+    };
+  }
+
+  getOrgNav(subPage) {
+    return {
+      section: {
+        title: 'Organization',
+        url: '/org',
+        icon: 'icon-gf icon-gf-users'
+      },
+      menu: [
+        {title: 'Preferences', active: subPage === 0, url: '/org', icon: 'fa fa-fw fa-cog'},
+        {title: 'Org Users', active: subPage === 1, url: '/org/users', icon: 'fa fa-fw fa-users'},
+        {title: 'API Keys', active: subPage === 2, url: '/org/apikeys', icon: 'fa fa-fw fa-key'},
       ]
     };
   }
@@ -41,7 +82,7 @@ export class NavModelSrv {
           title: dashboard.title,
           icon: 'icon-gf icon-gf-snapshot'
         },
-        navItems: [
+        menu: [
           {
             title: 'Go to original dashboard',
             icon: 'fa fa-fw fa-external-link',
@@ -51,28 +92,28 @@ export class NavModelSrv {
       };
     }
 
-    var navItems = [];
+    var menu = [];
 
     if (dashboard.meta.canEdit) {
-      navItems.push({
+      menu.push({
         title: 'Settings',
         icon: 'fa fa-fw fa-cog',
         clickHandler: () => dashNavCtrl.openEditView('settings')
       });
 
-      navItems.push({
+      menu.push({
         title: 'Templating',
         icon: 'fa fa-fw fa-code',
         clickHandler: () => dashNavCtrl.openEditView('templating')
       });
 
-      navItems.push({
+      menu.push({
         title: 'Annotations',
         icon: 'fa fa-fw fa-bolt',
         clickHandler: () => dashNavCtrl.openEditView('annotations')
       });
 
-      navItems.push({
+      menu.push({
         title: 'View JSON',
         icon: 'fa fa-fw fa-eye',
         clickHandler: () => dashNavCtrl.viewJson()
@@ -80,21 +121,21 @@ export class NavModelSrv {
     }
 
     if (this.contextSrv.isEditor && !dashboard.editable) {
-      navItems.push({
+      menu.push({
         title: 'Make Editable',
         icon: 'fa fa-fw fa-edit',
         clickHandler: () => dashNavCtrl.makeEditable()
       });
     }
 
-    navItems.push({
+    menu.push({
       title: 'Shortcuts',
       icon: 'fa fa-fw fa-keyboard-o',
       clickHandler: () => dashNavCtrl.showHelpModal()
     });
 
     if (this.contextSrv.isEditor) {
-      navItems.push({
+      menu.push({
         title: 'Save As ...',
         icon: 'fa fa-fw fa-save',
         clickHandler: () => dashNavCtrl.saveDashboardAs()
@@ -106,7 +147,7 @@ export class NavModelSrv {
         title: dashboard.title,
         icon: 'icon-gf icon-gf-dashboard'
       },
-      navItems: navItems
+      menu: menu
     };
   }
 }

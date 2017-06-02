@@ -4,16 +4,17 @@ import config from 'app/core/config';
 import _ from 'lodash';
 import $ from 'jquery';
 import coreModule from '../../core_module';
-
-import './menu';
+import {NavModel, NavModelItem}  from '../../nav_model_srv';
 
 export class NavbarCtrl {
-  model: any;
-  section: any;
+  model: NavModel;
+  section: NavModelItem;
+  hasMenu: boolean;
 
   /** @ngInject */
   constructor(private $scope, private $rootScope, private contextSrv) {
     this.section = this.model.section;
+    this.hasMenu = this.model.menu.length > 0;
   }
 
   showSearch() {
