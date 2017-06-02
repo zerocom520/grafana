@@ -20,12 +20,6 @@ function (angular, _, $, config) {
       self.$scope = $scope;
       self.dashboard = $scope.dashboard;
 
-      $scope.exitFullscreen = function() {
-        if (self.state.fullscreen) {
-          self.update({ fullscreen: false });
-        }
-      };
-
       $scope.onAppEvent('$routeUpdate', function() {
         var urlState = self.getQueryStringState();
         if (self.needsSync(urlState)) {

@@ -83,6 +83,10 @@ export class DashNavCtrl {
       });
     }
 
+    exitFullscreen() {
+      this.$rootScope.appEvent('panel-change-view', {fullscreen: false, edit: false});
+    }
+
     saveDashboard(options) {
       return this.dashboardSrv.saveDashboard(options);
     }

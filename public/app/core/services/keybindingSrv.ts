@@ -221,7 +221,7 @@ export class KeybindingSrv {
       }
 
       scope.appEvent('hide-dash-editor');
-      scope.exitFullscreen();
+      scope.appEvent('panel-change-view', {fullscreen: false, edit: false});
     });
   }
 }

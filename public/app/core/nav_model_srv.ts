@@ -100,6 +100,23 @@ export class NavModelSrv {
     };
   }
 
+  getAdminNav(subPage) {
+    return {
+      section: {
+        title: 'Admin',
+        url: 'admin',
+        icon: 'fa fa-fw fa-cogs'
+      },
+      menu: [
+        {title: 'Users', active: subPage === 0, url: '/admin/users', icon: 'fa fa-fw fa-user'},
+        {title: 'Orgs', active: subPage === 1, url: '/admin/orgs', icon: 'fa fa-fw fa-users'},
+        {title: 'Server Settings', active: subPage === 2, url: '/admin/settings', icon: 'fa fa-fw fa-cogs'},
+        {title: 'Server Stats', active: subPage === 2, url: '/admin/stats', icon: 'fa fa-fw fa-line-chart'},
+        {title: 'Style Guide', active: subPage === 2, url: '/styleguide', icon: 'fa fa-fw fa-key'},
+      ]
+    };
+  }
+
   getPluginsNav() {
     return {
       section: {
