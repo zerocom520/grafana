@@ -141,16 +141,16 @@ $dash-row-menu-animation-speed: 0.20s;
 .dash-row-menu {
   list-style: none;
   flex-grow: 1;
-  box-shadow: $search-shadow;
+  box-shadow: $dropdown-menu-shadow;
   background: $side-menu-bg;
 
   li a {
     display: block;
     white-space: nowrap;
-    color: $text-muted;
     font-size: $font-size-sm;
     padding: $spacer/2 $spacer;
     border-left: 2px solid $side-menu-bg;
+
     i {
       display: inline-block;
       padding-right: $spacer/2;
@@ -158,7 +158,6 @@ $dash-row-menu-animation-speed: 0.20s;
 
     &:hover {
       @include left-brand-border-gradient();
-      color: $link-color;
       background: $input-label-bg;
     }
   }
