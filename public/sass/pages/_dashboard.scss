@@ -53,30 +53,27 @@ div.flot-text {
   padding: 0px 10px 5px 10px;
 }
 
-.panel-title-container {
-  min-height: 9px;
-  padding: 2px 0;
-  cursor: move;
+.panel-header {
   word-wrap: break-word;
-  display: block;
-}
-
-.panel-title {
-  border: 0px;
+  min-height: 9px;
   font-weight: $font-weight-semi-bold;
   position: relative;
   width: 100%;
   display: block;
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
 }
 
-.panel-menu-container {
+.panel-header_menu-container {
   margin-left: 6px;
 }
 
 .panel-menu-toggle {
   color: $text-color-weak;
   cursor: pointer;
-  padding: 3px 5px;
+  padding: 5px;
 }
 
 .panel-loading {

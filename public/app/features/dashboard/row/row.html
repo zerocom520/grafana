@@ -4,7 +4,7 @@
 			<i class="fa fa-chevron-down" ng-show="!ctrl.row.collapse"></i>
 			<i class="fa fa-chevron-right" ng-show="ctrl.row.collapse"></i>
 		</span>
-		<span ng-class="ctrl.row.titleSize">{{ctrl.row.title | interpolateTemplateVars:this}}</span>
+		<span ng-class="ctrl.row.titleSize">{{ctrl.row.title | interpolateTemplateVars:ctrl}}</span>
 	</a>
 </div>
 

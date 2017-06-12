@@ -58,14 +58,8 @@ coreModule.filter('noXml', function() {
 });
 
 coreModule.filter('interpolateTemplateVars', function (templateSrv) {
-  var filterFunc: any = function(text, scope) {
-    var scopedVars;
-    if (scope.ctrl) {
-      scopedVars = (scope.ctrl.panel || scope.ctrl.row).scopedVars;
-    } else {
-      scopedVars = scope.row.scopedVars;
-    }
-
+  var filterFunc: any = function(text, ctrl) {
+    var scopedVars = (ctrl.panel || ctrl.row).scopedVars;
     return templateSrv.replaceWithText(text, scopedVars);
   };
 

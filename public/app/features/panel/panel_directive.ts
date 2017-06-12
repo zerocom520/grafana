@@ -10,22 +10,12 @@ var module = angular.module('grafana.directives');
 
 var panelTemplate = `
   <div class="panel-container">
-    <div class="panel-header">
-      <span class="panel-info-corner">
-        <i class="fa"></i>
-        <span class="panel-info-corner-inner"></span>
-      </span>
-
-      <span class="panel-loading" ng-show="ctrl.loading">
-        <i class="fa fa-spinner fa-spin"></i>
-      </span>
-
-      <panel-header class="panel-title-container drag-handle" panel-ctrl="ctrl"></panel-header>
-    </div>
+    <panel-header panel-ctrl="ctrl"></panel-header>
 
     <div class="panel-content">
       <ng-transclude></ng-transclude>
     </div>
+
     <panel-resizer></panel-resizer>
   </div>
 
