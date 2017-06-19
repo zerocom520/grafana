@@ -19,7 +19,7 @@ export class AclCtrl {
   permission = 1;
   userId: number;
   userGroupId: number;
-
+  aclList: any;
 
   /** @ngInject */
   constructor(private backendSrv, private $scope) {
@@ -27,6 +27,14 @@ export class AclCtrl {
     this.userPermissions = [];
     this.userGroupPermissions = [];
     this.get(this.dashboard.id);
+
+    this.aclList = [
+      {
+        type: 'role',
+        role: 'Viewer',
+        permissions: 1,
+      }
+    ];
   }
 
   get(dashboardId: number) {
