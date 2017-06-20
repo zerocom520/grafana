@@ -4,6 +4,7 @@ import config from 'app/core/config';
 import _ from 'lodash';
 import $ from 'jquery';
 import coreModule from 'app/core/core_module';
+import colors from 'app/core/utils/colors';
 
 var template = `
 <div class="graph-legend-popover">
@@ -38,7 +39,8 @@ export class ColorPickerCtrl {
 
   /** @ngInject */
   constructor(private $scope, private $rootScope) {
-    this.colors = $rootScope.colors;
+    // sort by display order, then grab color
+    this.colors = _.map(_.sortBy(colors, "di", "asc"), 'c');
     this.autoClose = $scope.autoClose;
     this.series = $scope.series;
   }

@@ -95,7 +95,7 @@ export class DataProcessor {
     var alias = seriesData.target;
 
     var colorIndex = index % colors.length;
-    var color = this.panel.aliasColors[alias] || colors[colorIndex];
+    var color = this.panel.aliasColors[alias] || colors[colorIndex].c;
 
     var series = new TimeSeries({datapoints: datapoints, alias: alias, color: color, unit: seriesData.unit});
 
