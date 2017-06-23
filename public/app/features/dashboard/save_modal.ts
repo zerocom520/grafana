@@ -16,7 +16,18 @@ const  template = `
 	</div>
 
 	<form name="ctrl.saveForm" ng-submit="ctrl.save()" class="modal-content" novalidate>
-		<h6 class="text-center">Add a note to describe your changes</h6>
+    <div class="gf-form-inline">
+      <gf-form-switch class="gf-form"
+                        label="Save Time Range"
+                        tooltip="Uncheck, then save and reload to disable all dashboard editing"
+                        checked="dashboard.editable">
+      </gf-form-switch>
+			<gf-form-switch class="gf-form"
+                      label="Save Variable State"
+                      tooltip="Hide row controls. Shortcut: CTRL+H or CMD+H"
+                      checked="dashboard.hideControls">
+      </gf-form-switch>
+	  </div>
 		<div class="p-t-2">
 			<div class="gf-form">
 				<label class="gf-form-hint">
@@ -24,7 +35,7 @@ const  template = `
 						type="text"
 						name="message"
 						class="gf-form-input"
-						placeholder="Updates to &hellip;"
+						placeholder="Add a note to describe your changes"
 						give-focus="true"
 						ng-model="ctrl.message"
 						ng-model-options="{allowInvalid: true}"
@@ -38,7 +49,7 @@ const  template = `
 					</small>
 				</label>
 			</div>
-		</div>
+    </div>
 
 		<div class="gf-form-button-row text-center">
 			<button type="submit" class="btn btn-success" ng-disabled="ctrl.saveForm.$invalid">Save</button>
