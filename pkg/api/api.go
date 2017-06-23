@@ -237,6 +237,8 @@ func (hs *HttpServer) registerRoutes() {
 			r.Combo("/db/:slug").Get(wrap(GetDashboard)).Delete(wrap(DeleteDashboard))
 			r.Post("/db", bind(m.SaveDashboardCommand{}), wrap(PostDashboard))
 
+			r.Get("/db/:slug/id", wrap(GetDashboardIdForSlug))
+
 			r.Post("/calculate-diff", bind(dtos.CalculateDiffOptions{}), wrap(CalculateDashboardDiff))
 			r.Get("/home", wrap(GetHomeDashboard))
 			r.Get("/tags", GetDashboardTags)

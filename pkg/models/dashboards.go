@@ -192,3 +192,9 @@ type GetDashboardSlugByIdQuery struct {
 	Id     int64
 	Result string
 }
+
+type GetDashboardIdBySlugQuery struct {
+	OrgId  int64
+	Slug   string
+	Result int64
+}

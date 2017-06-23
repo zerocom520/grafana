@@ -20,6 +20,7 @@ func init() {
 	bus.AddHandler("sql", SearchDashboards)
 	bus.AddHandler("sql", GetDashboardTags)
 	bus.AddHandler("sql", GetDashboardSlugById)
+	bus.AddHandler("sql", GetDashboardIdBySlug)
 	bus.AddHandler("sql", GetDashboardsByPluginId)
 }
 
@@ -400,6 +401,10 @@ type DashboardSlugDTO struct {
 	Slug string
 }
 
+type DashboardIdDTO struct {
+	Id int64
+}
+
 func GetDashboardSlugById(query *m.GetDashboardSlugByIdQuery) error {
 	var rawSql = `SELECT slug from dashboard WHERE Id=?`
 	var slug = DashboardSlugDTO{}
@@ -413,5 +418,21 @@ func GetDashboardSlugById(query *m.GetDashboardSlugByIdQuery) error {
 	}
 
 	query.Result = slug.Slug
+	return nil
+}
+
+func GetDashboardIdBySlug(query *m.GetDashboardIdBySlugQuery) error {
+	var rawSql = `SELECT id from dashboard WHERE org_id=? AND slug=?`
+
+	var id DashboardIdDTO
+	exists, err := x.Sql(rawSql, query.OrgId, query.Slug).Get(&id)
+
+	if err != nil {
+		return err
+	} else if exists == false {
+		return m.ErrDashboardNotFound
+	}
+
+	query.Result = id.Id
 	return nil
 }

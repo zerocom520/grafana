@@ -433,3 +433,16 @@ func GetDashboardTags(c *middleware.Context) {
 
 	c.JSON(200, query.Result)
 }
+
+func GetDashboardIdForSlug(c *middleware.Context) Response {
+	query := m.GetDashboardIdBySlugQuery{OrgId: c.OrgId, Slug: c.Params(":slug")}
+	err := bus.Dispatch(&query)
+	if err != nil {
+		if err == m.ErrDashboardNotFound {
+			return ApiError(404, "Dashboard not found", nil)
+		}
+		return ApiError(500, "Dashboard lookup error", err)
+	}
+
+	return Json(200, util.DynMap{"id": query.Result})
+}
