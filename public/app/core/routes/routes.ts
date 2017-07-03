@@ -22,13 +22,13 @@ function setupAngularRoutes($routeProvider, $locationProvider) {
     reloadOnSearch: false,
     pageClass: 'page-dashboard',
   })
-  .when('/dashboards/:slug/:id', {
+  .when('/dashboard/:type/:slug', {
     templateUrl: 'public/app/partials/dashboard.html',
     controller : 'LoadDashboardCtrl',
     reloadOnSearch: false,
     pageClass: 'page-dashboard',
   })
-  .when('/dashboard/:type/:slug', {
+  .when('/dashboard/:type/:slug:/:id', {
     templateUrl: 'public/app/partials/dashboard.html',
     controller : 'LoadDashboardCtrl',
     reloadOnSearch: false,
