@@ -29,6 +29,7 @@ import (
 
 	"github.com/grafana/grafana/pkg/social"
 	"github.com/grafana/grafana/pkg/tracing"
+	tsdbplugins "github.com/grafana/grafana/pkg/tsdb/plugins"
 )
 
 func NewGrafanaServer() *GrafanaServerImpl {
@@ -63,6 +64,13 @@ func (g *GrafanaServerImpl) Start() error {
 	login.Init()
 	social.NewOAuthService()
 	plugins.Init()
+	client, err := tsdbplugins.Init()
+	defer client.Kill()
+
+	if err != nil {
+		g.log.Error("failed to start plugins", "error", err)
+		g.Shutdown(1, "Startup failed")
+	}
 
 	if err := provisioning.Init(g.context, setting.HomePath, setting.Cfg); err != nil {
 		return fmt.Errorf("Failed to provision Grafana from config. error: %v", err)
