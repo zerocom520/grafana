@@ -9,12 +9,12 @@ jobs:
       - run:
           name: install yarn
           command: 'sudo npm install -g yarn --quiet'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
       - run:
           name: yarn install
           command: 'yarn install --pure-lockfile --no-progress'
-      - restore_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
-      - save_cache:
+     - save_cache:
           key: dependency-cache-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
