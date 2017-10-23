@@ -20,7 +20,7 @@ jobs:
             - node_modules
       - run:
           name: jest tests
-          command: npm run jest
+          command: npm run test:coverage
 
 workflows:
   version: 2
