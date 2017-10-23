@@ -19,11 +19,21 @@ jobs:
           paths:
             - node_modules
       - run:
-          name: jest tests
-          command: npm run test:coverage
+          name: frontend tests
+          command: './scripts/circle-test-frontend.sh'
+
+  test-backend:
+    docker:
+      - image: circleci/golang:1.9.1
+    steps:
+      - checkout
+      - run:
+          name: build backend and run go tests
+          command: './scripts/circle-test-backend.sh'
 
 workflows:
   version: 2
   test:
     jobs:
       - test-frontend
+      - test-backend
