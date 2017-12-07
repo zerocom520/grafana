@@ -91,7 +91,7 @@ func pluginScenario(desc string, t *testing.T, fn func()) {
 		setting.Cfg = ini.Empty()
 		sec, _ := setting.Cfg.NewSection("plugin.test-app")
 		sec.NewKey("path", "../../tests/test-app")
-		err := Init()
+		_, err := Init()
 
 		So(err, ShouldBeNil)
 
