@@ -1,35 +1,3 @@
-<!-- <navbar model="ctrl.navModel"></navbar> -->
-<!--  -->
-<!-- <div class="page&#45;container"> -->
-<!-- 	<div class="page&#45;header"> -->
-<!-- 		<page&#45;h1 model="ctrl.navModel"></page&#45;h1> -->
-<!--  -->
-<!-- 		<button class="btn btn&#45;success" ng&#45;click="ctrl.openAddUsersView()" ng&#45;hide="ctrl.externalUserMngLinkUrl"> -->
-<!-- 			<span>{{ctrl.addUsersBtnName}}</span> -->
-<!-- 		</button> -->
-<!--  -->
-<!-- 		<div class="page&#45;header&#45;tabs"> -->
-<!--  -->
-<!-- 			<a class="btn btn&#45;inverse" ng&#45;href="{{ctrl.externalUserMngLinkUrl}}" target="_blank" ng&#45;if="ctrl.externalUserMngLinkUrl"> -->
-<!-- 				<i class="fa fa&#45;external&#45;link&#45;square"></i> -->
-<!-- 				{{ctrl.addUsersBtnName}} -->
-<!--       </a> -->
-<!--  -->
-<!-- 			<ul class="gf&#45;tabs"> -->
-<!-- 				<li class="gf&#45;tabs&#45;item"> -->
-<!-- 					<a class="gf&#45;tabs&#45;link" ng&#45;click="ctrl.editor.index = 0" ng&#45;class="{active: ctrl.editor.index === 0}"> -->
-<!-- 						Users ({{ctrl.users.length}}) -->
-<!-- 					</a> -->
-<!-- 				</li> -->
-<!-- 				<li class="gf&#45;tabs&#45;item" ng&#45;show="ctrl.pendingInvites.length"> -->
-<!-- 					<a class="gf&#45;tabs&#45;link" ng&#45;click="ctrl.editor.index = 1" ng&#45;class="{active: ctrl.editor.index === 1}"> -->
-<!-- 						Pending Invites ({{ctrl.pendingInvites.length}}) -->
-<!-- 					</a> -->
-<!-- 				</li> -->
-<!-- 			</ul> -->
-<!-- 		</div> -->
-<!-- 	</div> -->
-
 <page-header model="ctrl.navModel"></page-header>
 
 <div class="page-container page-body">
@@ -38,13 +6,13 @@
     <button class="btn btn-inverse" ng-show="ctrl.pendingInvites.length" ng-click="ctrl.editor.index = 1">
       Pending Invites ({{ctrl.pendingInvites.length}})
     </button>
-		<a class="btn btn-success" href="org/users/new" ng-hide="ctrl.externalUserMngLinkUrl">
+		<a class="btn btn-success" href="org/users/invite" ng-show="ctrl.canInvite">
       <i class="fa fa-plus"></i>
-			<span>{{ctrl.addUsersBtnName}}</span>
+			<span>Invite</span>
     </a>
     <a class="btn btn-inverse" ng-href="{{ctrl.externalUserMngLinkUrl}}" target="_blank" ng-if="ctrl.externalUserMngLinkUrl">
       <i class="fa fa-external-link-square"></i>
-      {{ctrl.addUsersBtnName}}
+      [[ctrl.externalUserMngLinkName}}
     </a>
   </div>
 

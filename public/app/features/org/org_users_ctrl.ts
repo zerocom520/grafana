@@ -1,5 +1,3 @@
-///<reference path="../../headers/common.d.ts" />
-
 import config from 'app/core/config';
 import coreModule from 'app/core/core_module';
 import Remarkable from 'remarkable';
@@ -14,7 +12,7 @@ export class OrgUsersCtrl {
   externalUserMngLinkUrl: string;
   externalUserMngLinkName: string;
   externalUserMngInfo: string;
-  addUsersBtnName: string;
+  canInvite: boolean;
 
   /** @ngInject */
   constructor(private $scope, private backendSrv, navModelSrv, $sce) {
@@ -24,6 +22,7 @@ export class OrgUsersCtrl {
     };
 
     this.navModel = navModelSrv.getNav('cfg', 'users', 0);
+    this.canInvite = !config.disableLoginForm;
 
     this.get();
     this.editor = { index: 0 };
@@ -36,15 +35,6 @@ export class OrgUsersCtrl {
         linkTarget: '__blank',
       }).render(config.externalUserMngInfo);
     }
-
-    this.addUsersBtnName = this.getAddUserBtnName();
-  }
-
-  getAddUserBtnName(): string {
-    if (this.externalUserMngLinkName) {
-      return this.externalUserMngLinkName;
-    }
-    return "Add Member";
   }
 
   get() {
@@ -91,21 +81,6 @@ export class OrgUsersCtrl {
 
  getInviteUrl(invite) {
    return invite.url;
- }
-
- openAddUsersView() {
-   var modalScope = this.$scope.$new();
-   modalScope.invitesSent = this.get.bind(this);
-
-   var src = config.disableLoginForm
-     ? 'public/app/features/org/partials/add_user.html'
-     : 'public/app/features/org/partials/invite.html';
-
-     this.$scope.appEvent('show-modal', {
-       src: src,
-       modalClass: 'invite-modal',
-       scope: modalScope
-     });
  }
 
 }
