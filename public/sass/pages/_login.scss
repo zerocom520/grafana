@@ -10,8 +10,8 @@ $login-border: #8daac5;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url(../img/heatmap_bg_test.svg);
-  background-size: cover;
+  // background-image: url(../img/heatmap_bg_test.svg);
+  // background-size: cover;
 }
 
 input:-webkit-autofill,
@@ -337,7 +337,7 @@ select:-webkit-autofill:focus {
   perspective: 1000px;
   display: flex;
   flex-wrap: wrap;
-  z-index: 0;
+  z-index: 100;
   flex-direction: column;
   justify-content: stretch;
   justify-items: stretch;
