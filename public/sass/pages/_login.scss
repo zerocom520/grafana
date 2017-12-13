@@ -337,7 +337,7 @@ select:-webkit-autofill:focus {
   perspective: 1000px;
   display: flex;
   flex-wrap: wrap;
-  z-index: 100;
+  z-index: 0;
   flex-direction: column;
   justify-content: stretch;
   justify-items: stretch;
@@ -380,14 +380,4 @@ select:-webkit-autofill:focus {
       background-color: rgb(25, 50, 80);
     }
   }
-}
-
-.login-bg-fx {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 100%;
-  background-image: -webkit-radial-gradient(center center, ellipse farthest-corner, transparent 0%, transparent 10%, rgba(18, 22, 29, 1) 100%);
-  z-index:2;
 }
