@@ -7,6 +7,7 @@
   padding: 5rem 0 1rem 0;
   font-size: $font-size-sm;
   width: 98%;  /* was causing horiz scrollbars - need to examine */
+  position: relative;
 
   a {
     color: $footer-link-color;
