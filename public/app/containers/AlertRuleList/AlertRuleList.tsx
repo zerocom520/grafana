@@ -74,7 +74,7 @@ export class AlertRuleList extends React.Component<IContainerProps, any> {
                 <input
                   type="text"
                   className="gf-form-input width-13"
-                  placeholder="Search alert"
+                  placeholder="Search alerts"
                   value={alertList.search}
                   onChange={this.onSearchQueryChange}
                 />
