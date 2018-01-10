@@ -25,6 +25,11 @@ export class AlertRuleList extends React.Component<IContainerProps, any> {
     this.props.nav.load('alerting', 'alert-list');
     this.fetchRules();
     this.state = { search: '' };
+    this.handleTooltipPositionChange = this.handleTooltipPositionChange.bind(this);
+
+    this.state = {
+      tooltipPosition: 'auto',
+    };
   }
 
   onStateFilterChanged = evt => {
@@ -50,6 +55,12 @@ export class AlertRuleList extends React.Component<IContainerProps, any> {
     this.props.alertList.setSearchQuery(evt.target.value);
   };
 
+  handleTooltipPositionChange(evt) {
+    evt.preventDefault();
+    this.setState({
+      tooltipPosition: evt.target.value,
+    });
+  }
   render() {
     const { nav, alertList } = this.props;
 
