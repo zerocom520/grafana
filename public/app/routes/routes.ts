@@ -1,6 +1,6 @@
 import './dashboard_loaders';
 import './ReactContainer';
-import { ServerStats } from 'app/containers/ServerStats/ServerStats';
+import ServerStats from 'app/containers/ServerStats/ServerStats';
 import { AlertRuleList } from 'app/containers/AlertRuleList/AlertRuleList';
 
 /** @ngInject **/

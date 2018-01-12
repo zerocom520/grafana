@@ -6,12 +6,14 @@ import coreModule from 'app/core/core_module';
 import { profiler } from 'app/core/profiler';
 import appEvents from 'app/core/app_events';
 import Drop from 'tether-drop';
+import { configureStore } from 'app/store/configureStore';
 import { createStore } from 'app/stores/store';
 import colors from 'app/core/utils/colors';
 
 export class GrafanaCtrl {
   /** @ngInject */
   constructor($scope, alertSrv, utilSrv, $rootScope, $controller, contextSrv, bridgeSrv, backendSrv) {
+    configureStore();
     createStore(backendSrv);
 
     $scope.init = function() {

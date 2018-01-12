@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import coreModule from 'app/core/core_module';
-import { store } from 'app/stores/store';
-import { Provider } from 'mobx-react';
+import { store } from 'app/store/configureStore';
+import { Provider } from 'react-redux';
 
 function WrapInProvider(store, Component, props) {
   return (
-    <Provider {...store}>
+    <Provider store={store}>
       <Component {...props} />
     </Provider>
   );

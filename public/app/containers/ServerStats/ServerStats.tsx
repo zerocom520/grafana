@@ -1,45 +1,44 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react';
-import PageHeader from 'app/core/components/PageHeader/PageHeader';
-import IContainerProps from 'app/containers/IContainerProps';
+import { connect } from 'react-redux';
+import { setActive, setPaused } from 'app/store/actions';
 
-@inject('nav', 'serverStats')
-@observer
-export class ServerStats extends React.Component<IContainerProps, any> {
+export class ServerStats extends React.Component<any, any> {
   constructor(props) {
     super(props);
-    const { nav, serverStats } = this.props;
-
-    nav.load('cfg', 'admin', 'server-stats');
-    serverStats.load();
+    console.log(this.props);
   }
 
+  onClick = () => {
+    if (!this.props.active) {
+      this.props.setActive();
+    } else {
+      this.props.setPaused();
+    }
+  };
+
   render() {
-    const { nav, serverStats } = this.props;
     return (
       <div>
-        <PageHeader model={nav as any} />
-        <div className="page-container page-body">
-          <table className="filter-table form-inline">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>{serverStats.stats.map(StatItem)}</tbody>
-          </table>
-        </div>
+        <h1>
+          {this.props.active && <span>State flags.active is true!</span>}
+          {!this.props.active && <span>State flags.active is false!</span>}
+        </h1>
+        <button className="btn btn-large btn-success" onClick={this.onClick}>
+          Click me
+        </button>
       </div>
     );
   }
 }
 
-function StatItem(stat) {
-  return (
-    <tr key={stat.name}>
-      <td>{stat.name}</td>
-      <td>{stat.value}</td>
-    </tr>
-  );
-}
+const mapStateToProps = state => {
+  console.log('mapStateToProps state', state);
+  return {
+    active: state.flags.active,
+  };
+};
+
+export default connect(mapStateToProps, {
+  setActive,
+  setPaused,
+})(ServerStats);
