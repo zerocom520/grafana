@@ -1,4 +1,4 @@
-import coreModule from "app/core/core_module";
+import coreModule from 'app/core/core_module';
 
 export default class TeamDetailsCtrl {
   team: Team;
@@ -6,13 +6,9 @@ export default class TeamDetailsCtrl {
   navModel: any;
 
   /** @ngInject **/
-  constructor(
-    private $scope,
-    private backendSrv,
-    private $routeParams,
-    navModelSrv
-  ) {
-    this.navModel = navModelSrv.getNav("cfg", "teams", 0);
+  constructor(private $scope, private backendSrv, private $routeParams, navModelSrv) {
+    this.navModel = navModelSrv.getNav('cfg', 'teams', 0);
+    this.userPicked = this.userPicked.bind(this);
     this.get = this.get.bind(this);
     this.get();
   }
