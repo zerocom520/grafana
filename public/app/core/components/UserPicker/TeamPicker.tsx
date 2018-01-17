@@ -11,14 +11,14 @@ export interface IProps {
   handlePicked: (user) => void;
 }
 
-export interface User {
+export interface Team {
   id: number;
   label: string;
+  name: string;
   avatarUrl: string;
-  login: string;
 }
 
-class UserPicker extends Component<IProps, any> {
+class TeamPicker extends Component<IProps, any> {
   debouncedSearch: any;
   backendSrv: any;
 
@@ -37,17 +37,20 @@ class UserPicker extends Component<IProps, any> {
     const { toggleLoading, backendSrv } = this.props;
 
     toggleLoading(true);
-    return backendSrv.get(`/api/users/search?perpage=10&page=1&query=${query}`).then(result => {
-      const users = result.users.map(user => {
+
+    return backendSrv.get(`/api/teams/search?perpage=10&page=1&query=${query}`).then(result => {
+      const teams = result.teams.map(team => {
+        // return { text: ug.name, value: ug };
         return {
-          id: user.id,
-          label: `${user.login} - ${user.email}`,
-          avatarUrl: user.avatarUrl,
-          login: user.login,
+          id: team.id,
+          label: team.name,
+          name: team.name,
+          avatarUrl: team.avatarUrl,
         };
       });
+
       toggleLoading(false);
-      return { options: users };
+      return { options: teams };
     });
   }
 
@@ -75,4 +78,4 @@ class UserPicker extends Component<IProps, any> {
   }
 }
 
-export default withPicker(UserPicker);
+export default withPicker(TeamPicker);
