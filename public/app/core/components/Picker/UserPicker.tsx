@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import Select from 'react-select';
-import UserPickerOption from './UserPickerOption';
+import PickerOption from './PickerOption';
 import withPicker from './withPicker';
 import { debounce } from 'lodash';
 
@@ -11,14 +11,14 @@ export interface IProps {
   handlePicked: (user) => void;
 }
 
-export interface Team {
+export interface User {
   id: number;
   label: string;
-  name: string;
   avatarUrl: string;
+  login: string;
 }
 
-class TeamPicker extends Component<IProps, any> {
+class UserPicker extends Component<IProps, any> {
   debouncedSearch: any;
   backendSrv: any;
 
@@ -26,7 +26,7 @@ class TeamPicker extends Component<IProps, any> {
     super(props);
     this.state = {};
     this.search = this.search.bind(this);
-    // this.handleChange = this.handleChange.bind(this);
+
     this.debouncedSearch = debounce(this.search, 300, {
       leading: true,
       trailing: false,
@@ -37,20 +37,17 @@ class TeamPicker extends Component<IProps, any> {
     const { toggleLoading, backendSrv } = this.props;
 
     toggleLoading(true);
-
-    return backendSrv.get(`/api/teams/search?perpage=10&page=1&query=${query}`).then(result => {
-      const teams = result.teams.map(team => {
-        // return { text: ug.name, value: ug };
+    return backendSrv.get(`/api/users/search?perpage=10&page=1&query=${query}`).then(result => {
+      const users = result.users.map(user => {
         return {
-          id: team.id,
-          label: team.name,
-          name: team.name,
-          avatarUrl: team.avatarUrl,
+          id: user.id,
+          label: `${user.login} - ${user.email}`,
+          avatarUrl: user.avatarUrl,
+          login: user.login,
         };
       });
-
       toggleLoading(false);
-      return { options: teams };
+      return { options: users };
     });
   }
 
@@ -62,7 +59,7 @@ class TeamPicker extends Component<IProps, any> {
       <div className="user-picker">
         <AsyncComponent
           valueKey="id"
-          multi={this.state.multi}
+          multi={false}
           labelKey="label"
           cache={false}
           isLoading={isLoading}
@@ -70,7 +67,7 @@ class TeamPicker extends Component<IProps, any> {
           loadingPlaceholder="Loading..."
           onChange={handlePicked}
           className="width-8 gf-form-input gf-form-input--form-dropdown"
-          optionComponent={UserPickerOption}
+          optionComponent={PickerOption}
           placeholder="Choose"
         />
       </div>
@@ -78,4 +75,4 @@ class TeamPicker extends Component<IProps, any> {
   }
 }
 
-export default withPicker(TeamPicker);
+export default withPicker(UserPicker);

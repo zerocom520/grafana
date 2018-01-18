@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import Select from 'react-select';
-import UserPickerOption from './UserPickerOption';
+import PickerOption from './PickerOption';
 import withPicker from './withPicker';
 import { debounce } from 'lodash';
 
@@ -11,14 +11,14 @@ export interface IProps {
   handlePicked: (user) => void;
 }
 
-export interface User {
+export interface Team {
   id: number;
   label: string;
+  name: string;
   avatarUrl: string;
-  login: string;
 }
 
-class UserPicker extends Component<IProps, any> {
+class TeamPicker extends Component<IProps, any> {
   debouncedSearch: any;
   backendSrv: any;
 
@@ -26,7 +26,7 @@ class UserPicker extends Component<IProps, any> {
     super(props);
     this.state = {};
     this.search = this.search.bind(this);
-    // this.handleChange = this.handleChange.bind(this);
+
     this.debouncedSearch = debounce(this.search, 300, {
       leading: true,
       trailing: false,
@@ -37,17 +37,18 @@ class UserPicker extends Component<IProps, any> {
     const { toggleLoading, backendSrv } = this.props;
 
     toggleLoading(true);
-    return backendSrv.get(`/api/users/search?perpage=10&page=1&query=${query}`).then(result => {
-      const users = result.users.map(user => {
+    return backendSrv.get(`/api/teams/search?perpage=10&page=1&query=${query}`).then(result => {
+      const teams = result.teams.map(team => {
         return {
-          id: user.id,
-          label: `${user.login} - ${user.email}`,
-          avatarUrl: user.avatarUrl,
-          login: user.login,
+          id: team.id,
+          label: team.name,
+          name: team.name,
+          avatarUrl: team.avatarUrl,
         };
       });
+
       toggleLoading(false);
-      return { options: users };
+      return { options: teams };
     });
   }
 
@@ -59,7 +60,7 @@ class UserPicker extends Component<IProps, any> {
       <div className="user-picker">
         <AsyncComponent
           valueKey="id"
-          multi={this.state.multi}
+          multi={false}
           labelKey="label"
           cache={false}
           isLoading={isLoading}
@@ -67,7 +68,7 @@ class UserPicker extends Component<IProps, any> {
           loadingPlaceholder="Loading..."
           onChange={handlePicked}
           className="width-8 gf-form-input gf-form-input--form-dropdown"
-          optionComponent={UserPickerOption}
+          optionComponent={PickerOption}
           placeholder="Choose"
         />
       </div>
@@ -75,4 +76,4 @@ class UserPicker extends Component<IProps, any> {
   }
 }
 
-export default withPicker(UserPicker);
+export default withPicker(TeamPicker);
