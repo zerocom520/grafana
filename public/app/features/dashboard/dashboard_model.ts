@@ -31,6 +31,7 @@ export class DashboardModel {
   revision: number;
   links: any;
   gnetId: any;
+  slug: string;
   panels: PanelModel[];
 
   // ------------------
@@ -75,6 +76,7 @@ export class DashboardModel {
     this.version = data.version || 0;
     this.links = data.links || [];
     this.gnetId = data.gnetId || null;
+    this.slug = data.slug || meta.slug;
     this.panels = _.map(data.panels || [], panelData => new PanelModel(panelData));
 
     this.initMeta(meta);

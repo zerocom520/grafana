@@ -7,6 +7,8 @@ import (
 
 	"github.com/gosimple/slug"
 	"github.com/grafana/grafana/pkg/components/simplejson"
+	"github.com/grafana/grafana/pkg/log"
+	"github.com/taskcluster/slugid-go/slugid"
 )
 
 // Typed errors
@@ -66,7 +68,7 @@ func NewDashboard(title string) *Dashboard {
 	dash.Title = title
 	dash.Created = time.Now()
 	dash.Updated = time.Now()
-	dash.UpdateSlug()
+	dash.Slug = title
 	return dash
 }
 
@@ -88,7 +90,6 @@ func NewDashboardFromJson(data *simplejson.Json) *Dashboard {
 	dash := &Dashboard{}
 	dash.Data = data
 	dash.Title = dash.Data.Get("title").MustString()
-	dash.UpdateSlug()
 
 	if id, err := dash.Data.Get("id").Float64(); err == nil {
 		dash.Id = int64(id)
@@ -105,6 +106,17 @@ func NewDashboardFromJson(data *simplejson.Json) *Dashboard {
 
 	if gnetId, err := dash.Data.Get("gnetId").Float64(); err == nil {
 		dash.GnetId = int64(gnetId)
+	}
+
+	if len(dash.Data.Get("slug").MustString("")) > 0 {
+		dash.Slug = dash.Data.Get("slug").MustString("slug")
+	} else {
+		if dash.Id > 0 {
+			title := dash.Data.Get("title").MustString()
+			dash.Slug = SlugifyTitle(title)
+		} else {
+			dash.Slug = slugid.Nice()
+		}
 	}
 
 	return dash
@@ -139,8 +151,7 @@ func (dash *Dashboard) GetString(prop string, defaultValue string) string {
 
 // UpdateSlug updates the slug
 func (dash *Dashboard) UpdateSlug() {
-	title := dash.Data.Get("title").MustString()
-	dash.Slug = SlugifyTitle(title)
+	log.Info("UpdateSLug", "slug", dash.Slug)
 }
 
 func SlugifyTitle(title string) string {
