@@ -18,6 +18,7 @@ func init() {
 	bus.AddHandler("sql", GetDashboardTags)
 	bus.AddHandler("sql", GetDashboardSlugById)
 	bus.AddHandler("sql", GetDashboardsByPluginId)
+	bus.AddHandler("sql", GetDashboardIdBySlug)
 }
 
 func SaveDashboard(cmd *m.SaveDashboardCommand) error {
@@ -379,5 +380,26 @@ func GetDashboardSlugById(query *m.GetDashboardSlugByIdQuery) error {
 	}
 
 	query.Result = slug.Slug
+	return nil
+}
+
+// these structs can be removed after xorm upgrade as newest xorm support Get for scalars
+type DashboardIdDTO struct {
+	Id int64
+}
+
+func GetDashboardIdBySlug(query *m.GetDashboardIdBySlugQuery) error {
+	var rawSql = `SELECT id from dashboard WHERE org_id=? AND slug=?`
+	var id DashboardIdDTO
+
+	exists, err := x.SQL(rawSql, query.OrgId, query.Slug).Get(&id)
+	if err != nil {
+		return err
+	} else if exists == false {
+		return m.ErrDashboardNotFound
+	}
+
+	query.Result = id.Id
+
 	return nil
 }

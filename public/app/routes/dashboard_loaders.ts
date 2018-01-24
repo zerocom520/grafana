@@ -18,6 +18,16 @@ export class LoadDashboardCtrl {
       return;
     }
 
+    // if no id redirect to new route
+    if (!$routeParams.id) {
+      backendSrv.get(`/api/dashboards/db/${$routeParams.slug}/id`).then(res => {
+        if (res.id) {
+          $location.path(`d/${res.id}/${$routeParams.slug}`);
+        }
+      });
+      return;
+    }
+
     dashboardLoaderSrv.loadDashboard($routeParams.type, $routeParams.slug, $routeParams.id).then(function(result) {
       $scope.initDashboard(result, $scope);
     });

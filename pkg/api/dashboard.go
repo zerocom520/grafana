@@ -43,6 +43,18 @@ func dashboardGuardianResponse(err error) Response {
 	}
 }
 
+func GetDashboardIdBySlug(c *middleware.Context) Response {
+	query := m.GetDashboardIdBySlugQuery{OrgId: c.OrgId, Slug: c.Params(":slug")}
+	if err := bus.Dispatch(&query); err != nil {
+		if err == m.ErrDashboardNotFound {
+			return Json(404, util.DynMap{"message": "Dashboard not found"})
+		}
+		return ApiError(500, "Failed to load dashboard id by slug", err)
+	}
+
+	return Json(200, util.DynMap{"id": query.Result})
+}
+
 func GetDashboard(c *middleware.Context) Response {
 	dash, rsp := getDashboardHelper(c.OrgId, c.Params(":slug"), c.ParamsInt64(":dashboardId"))
 	if rsp != nil {
