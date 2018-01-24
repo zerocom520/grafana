@@ -44,7 +44,7 @@ func dashboardGuardianResponse(err error) Response {
 }
 
 func GetDashboard(c *middleware.Context) Response {
-	dash, rsp := getDashboardHelper(c.OrgId, c.Params(":slug"), 0)
+	dash, rsp := getDashboardHelper(c.OrgId, c.Params(":slug"), c.ParamsInt64(":dashboardId"))
 	if rsp != nil {
 		return rsp
 	}

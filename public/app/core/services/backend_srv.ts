@@ -225,6 +225,10 @@ export class BackendSrv {
     return this.get('/api/dashboards/' + type + '/' + slug);
   }
 
+  getDashboardById(id: number) {
+    return this.get('/api/dashboards/id/' + id);
+  }
+
   saveDashboard(dash, options) {
     options = options || {};
 

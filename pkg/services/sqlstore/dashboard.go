@@ -165,6 +165,11 @@ func setHasAcl(sess *DBSession, dash *m.Dashboard) error {
 }
 
 func GetDashboard(query *m.GetDashboardQuery) error {
+	// if id is provided do not find by slug
+	if query.Id > 0 {
+		query.Slug = ""
+	}
+
 	dashboard := m.Dashboard{Slug: query.Slug, OrgId: query.OrgId, Id: query.Id}
 	has, err := x.Get(&dashboard)
 

@@ -18,10 +18,7 @@ export class LoadDashboardCtrl {
       return;
     }
 
-    dashboardLoaderSrv.loadDashboard($routeParams.type, $routeParams.slug).then(function(result) {
-      if ($routeParams.keepRows) {
-        result.meta.keepRows = true;
-      }
+    dashboardLoaderSrv.loadDashboard($routeParams.type, $routeParams.slug, $routeParams.id).then(function(result) {
       $scope.initDashboard(result, $scope);
     });
   }

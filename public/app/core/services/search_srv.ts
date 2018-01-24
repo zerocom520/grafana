@@ -88,7 +88,7 @@ export class SearchSrv {
   }
 
   private transformToViewModel(hit) {
-    hit.url = 'dashboard/db/' + hit.slug;
+    hit.url = `d/${hit.id}/${hit.slug}`;
     return hit;
   }
 
