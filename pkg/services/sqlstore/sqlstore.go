@@ -12,6 +12,7 @@ import (
 	"github.com/grafana/grafana/pkg/log"
 	m "github.com/grafana/grafana/pkg/models"
 	"github.com/grafana/grafana/pkg/services/annotations"
+	"github.com/grafana/grafana/pkg/services/dashboards"
 	"github.com/grafana/grafana/pkg/services/sqlstore/migrations"
 	"github.com/grafana/grafana/pkg/services/sqlstore/migrator"
 	"github.com/grafana/grafana/pkg/setting"
@@ -100,6 +101,7 @@ func SetEngine(engine *xorm.Engine) (err error) {
 
 	// Init repo instances
 	annotations.SetRepository(&SqlAnnotationRepo{})
+	dashboards.SetRepository(&dashboards.DashboardRepository{})
 	return nil
 }
 
@@ -158,10 +160,14 @@ func getEngine() (*xorm.Engine, error) {
 	} else {
 		engine.SetMaxOpenConns(DbCfg.MaxOpenConn)
 		engine.SetMaxIdleConns(DbCfg.MaxIdleConn)
-		engine.SetLogger(&xorm.DiscardLogger{})
-		// engine.SetLogger(NewXormLogger(log.LvlInfo, log.New("sqlstore.xorm")))
-		// engine.ShowSQL = true
-		// engine.ShowInfo = true
+		debugSql := setting.Cfg.Section("database").Key("log_queries").MustBool(false)
+		if !debugSql {
+			engine.SetLogger(&xorm.DiscardLogger{})
+		} else {
+			engine.SetLogger(NewXormLogger(log.LvlInfo, log.New("sqlstore.xorm")))
+			engine.ShowSQL(true)
+			engine.ShowExecTime(true)
+		}
 	}
 	return engine, nil
 }
@@ -190,12 +196,12 @@ func LoadConfig() {
 		DbCfg.Host = sec.Key("host").String()
 		DbCfg.Name = sec.Key("name").String()
 		DbCfg.User = sec.Key("user").String()
-		DbCfg.MaxOpenConn = sec.Key("max_open_conn").MustInt(0)
-		DbCfg.MaxIdleConn = sec.Key("max_idle_conn").MustInt(0)
 		if len(DbCfg.Pwd) == 0 {
 			DbCfg.Pwd = sec.Key("password").String()
 		}
 	}
+	DbCfg.MaxOpenConn = sec.Key("max_open_conn").MustInt(0)
+	DbCfg.MaxIdleConn = sec.Key("max_idle_conn").MustInt(0)
 
 	if DbCfg.Type == "sqlite3" {
 		UseSQLite3 = true

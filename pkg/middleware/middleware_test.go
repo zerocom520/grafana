@@ -363,6 +363,7 @@ type scenarioContext struct {
 	respJson       map[string]interface{}
 	handlerFunc    handlerFunc
 	defaultHandler macaron.Handler
+	url            string
 
 	req *http.Request
 }
@@ -394,6 +395,20 @@ func (sc *scenarioContext) fakeReq(method, url string) *scenarioContext {
 			req.Header.Add("Cookie", "grafana_sess="+sc.context.Session.ID()+";")
 		}
 	}
+
+	return sc
+}
+
+func (sc *scenarioContext) fakeReqWithParams(method, url string, queryParams map[string]string) *scenarioContext {
+	sc.resp = httptest.NewRecorder()
+	req, err := http.NewRequest(method, url, nil)
+	q := req.URL.Query()
+	for k, v := range queryParams {
+		q.Add(k, v)
+	}
+	req.URL.RawQuery = q.Encode()
+	So(err, ShouldBeNil)
+	sc.req = req
 
 	return sc
 }

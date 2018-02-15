@@ -12,7 +12,7 @@ import (
 )
 
 type SocialGithub struct {
-	*oauth2.Config
+	*SocialBase
 	allowedDomains       []string
 	allowedOrganizations []string
 	apiUrl               string
@@ -58,12 +58,12 @@ func (s *SocialGithub) IsTeamMember(client *http.Client) bool {
 	return false
 }
 
-func (s *SocialGithub) IsOrganizationMember(client *http.Client) bool {
+func (s *SocialGithub) IsOrganizationMember(client *http.Client, organizationsUrl string) bool {
 	if len(s.allowedOrganizations) == 0 {
 		return true
 	}
 
-	organizations, err := s.FetchOrganizations(client)
+	organizations, err := s.FetchOrganizations(client, organizationsUrl)
 	if err != nil {
 		return false
 	}
@@ -167,12 +167,12 @@ func (s *SocialGithub) HasMoreRecords(headers http.Header) (string, bool) {
 
 }
 
-func (s *SocialGithub) FetchOrganizations(client *http.Client) ([]string, error) {
+func (s *SocialGithub) FetchOrganizations(client *http.Client, organizationsUrl string) ([]string, error) {
 	type Record struct {
 		Login string `json:"login"`
 	}
 
-	response, err := HttpGet(client, fmt.Sprintf(s.apiUrl+"/orgs"))
+	response, err := HttpGet(client, organizationsUrl)
 	if err != nil {
 		return nil, fmt.Errorf("Error getting organizations: %s", err)
 	}
@@ -192,11 +192,13 @@ func (s *SocialGithub) FetchOrganizations(client *http.Client) ([]string, error)
 	return logins, nil
 }
 
-func (s *SocialGithub) UserInfo(client *http.Client) (*BasicUserInfo, error) {
+func (s *SocialGithub) UserInfo(client *http.Client, token *oauth2.Token) (*BasicUserInfo, error) {
+
 	var data struct {
-		Id    int    `json:"id"`
-		Login string `json:"login"`
-		Email string `json:"email"`
+		Id               int    `json:"id"`
+		Login            string `json:"login"`
+		Email            string `json:"email"`
+		OrganizationsUrl string `json:"organizations_url"`
 	}
 
 	response, err := HttpGet(client, s.apiUrl)
@@ -208,7 +210,7 @@ func (s *SocialGithub) UserInfo(client *http.Client) (*BasicUserInfo, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Error getting user info: %s", err)
 	}
-
+	data.OrganizationsUrl = s.apiUrl + "/user/orgs"
 	userInfo := &BasicUserInfo{
 		Name:  data.Login,
 		Login: data.Login,
@@ -219,7 +221,7 @@ func (s *SocialGithub) UserInfo(client *http.Client) (*BasicUserInfo, error) {
 		return nil, ErrMissingTeamMembership
 	}
 
-	if !s.IsOrganizationMember(client) {
+	if !s.IsOrganizationMember(client, data.OrganizationsUrl) {
 		return nil, ErrMissingOrganizationMembership
 	}
 

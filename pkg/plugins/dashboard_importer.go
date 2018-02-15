@@ -69,6 +69,7 @@ func ImportDashboard(cmd *ImportDashboardCommand) error {
 		UserId:    cmd.UserId,
 		Overwrite: cmd.Overwrite,
 		PluginId:  cmd.PluginId,
+		FolderId:  dashboard.FolderId,
 	}
 
 	if err := bus.Dispatch(&saveCmd); err != nil {
@@ -81,6 +82,7 @@ func ImportDashboard(cmd *ImportDashboardCommand) error {
 		Path:             cmd.Path,
 		Revision:         dashboard.Data.Get("revision").MustInt64(1),
 		ImportedUri:      "db/" + saveCmd.Result.Slug,
+		ImportedUrl:      saveCmd.Result.GetUrl(),
 		ImportedRevision: dashboard.Data.Get("revision").MustInt64(1),
 		Imported:         true,
 	}

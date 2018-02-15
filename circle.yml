@@ -27,7 +27,7 @@ jobs:
 
   test-backend:
     docker:
-      - image: circleci/golang:1.9.1
+      - image: circleci/golang:1.9.3
     working_directory: /go/src/github.com/grafana/grafana
     steps:
       - checkout

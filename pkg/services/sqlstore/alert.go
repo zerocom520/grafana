@@ -14,7 +14,6 @@ func init() {
 	bus.AddHandler("sql", SaveAlerts)
 	bus.AddHandler("sql", HandleAlertsQuery)
 	bus.AddHandler("sql", GetAlertById)
-	bus.AddHandler("sql", DeleteAlertById)
 	bus.AddHandler("sql", GetAllAlertQueryHandler)
 	bus.AddHandler("sql", SetAlertState)
 	bus.AddHandler("sql", GetAlertStatesForDashboard)
@@ -24,7 +23,7 @@ func init() {
 
 func GetAlertById(query *m.GetAlertByIdQuery) error {
 	alert := m.Alert{}
-	has, err := x.Id(query.Id).Get(&alert)
+	has, err := x.ID(query.Id).Get(&alert)
 	if !has {
 		return fmt.Errorf("could not find alert")
 	}
@@ -61,12 +60,6 @@ func deleteAlertByIdInternal(alertId int64, reason string, sess *DBSession) erro
 	return nil
 }
 
-func DeleteAlertById(cmd *m.DeleteAlertCommand) error {
-	return inTransaction(func(sess *DBSession) error {
-		return deleteAlertByIdInternal(cmd.AlertId, "DeleteAlertCommand", sess)
-	})
-}
-
 func HandleAlertsQuery(query *m.GetAlertsQuery) error {
 	var sql bytes.Buffer
 	params := make([]interface{}, 0)
@@ -88,13 +81,18 @@ func HandleAlertsQuery(query *m.GetAlertsQuery) error {
 		params = append(params, query.PanelId)
 	}
 
-	if len(query.State) > 0 && query.State[0] != "ALL" {
+	if len(query.State) > 0 && query.State[0] != "all" {
 		sql.WriteString(` AND (`)
 		for i, v := range query.State {
 			if i > 0 {
 				sql.WriteString(" OR ")
 			}
-			sql.WriteString("state = ? ")
+			if strings.HasPrefix(v, "not_") {
+				sql.WriteString("state <> ? ")
+				v = strings.TrimPrefix(v, "not_")
+			} else {
+				sql.WriteString("state = ? ")
+			}
 			params = append(params, v)
 		}
 		sql.WriteString(")")
@@ -108,7 +106,7 @@ func HandleAlertsQuery(query *m.GetAlertsQuery) error {
 	}
 
 	alerts := make([]*m.Alert, 0)
-	if err := x.Sql(sql.String(), params...).Find(&alerts); err != nil {
+	if err := x.SQL(sql.String(), params...).Find(&alerts); err != nil {
 		return err
 	}
 
@@ -255,7 +253,7 @@ func SetAlertState(cmd *m.SetAlertStateCommand) error {
 			alert.ExecutionError = cmd.Error
 		}
 
-		sess.Id(alert.Id).Update(&alert)
+		sess.ID(alert.Id).Update(&alert)
 		return nil
 	})
 }
@@ -319,7 +317,7 @@ func GetAlertStatesForDashboard(query *m.GetAlertStatesForDashboardQuery) error 
 	                WHERE org_id = ? AND dashboard_id = ?`
 
 	query.Result = make([]*m.AlertStateInfoDTO, 0)
-	err := x.Sql(rawSql, query.OrgId, query.DashboardId).Find(&query.Result)
+	err := x.SQL(rawSql, query.OrgId, query.DashboardId).Find(&query.Result)
 
 	return err
 }
