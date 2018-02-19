@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/go-xorm/xorm"
 	"github.com/grafana/grafana/pkg/components/simplejson"
 	m "github.com/grafana/grafana/pkg/models"
 	"github.com/grafana/grafana/pkg/services/search"
@@ -14,10 +13,8 @@ import (
 )
 
 func TestDashboardDataAccess(t *testing.T) {
-	var x *xorm.Engine
-
 	Convey("Testing DB", t, func() {
-		x = InitTestDB(t)
+		InitTestDB(t)
 
 		Convey("Given saved dashboard", func() {
 			savedFolder := insertTestDashboard("1 test dash folder", 1, 0, true, "prod", "webapp")
