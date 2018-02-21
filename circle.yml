@@ -47,11 +47,8 @@ jobs:
 
 workflows:
   version: 2
-  test:
+  test-and-build:
     jobs:
       - test-frontend
       - test-backend
-      - build:
-          requires:
-            - test-frontend
-            - test-backend
+      - build
