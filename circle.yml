@@ -35,9 +35,23 @@ jobs:
           name: build backend and run go tests
           command: './scripts/circle-test-backend.sh'
 
+  build:
+    docker:
+     - image: grafana/build-container:v0.1
+    working_directory: /go/src/github.com/grafana/grafana
+    steps:
+      - checkout
+      - run:
+          name: build and package grafana
+          command: './scripts/build/build.sh'
+
 workflows:
   version: 2
   test:
     jobs:
       - test-frontend
       - test-backend
+      - build
+          requires:
+            - test-frontend
+            - test-backend
