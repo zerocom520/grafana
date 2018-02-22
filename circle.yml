@@ -50,7 +50,7 @@ jobs:
             - grafana*
 
 # this is for branches
-  deploy:
+  sign-packages:
     docker:
      - image: grafana/build-container:v0.1
     working_directory: /go/src/github.com/grafana/grafana
@@ -59,14 +59,30 @@ jobs:
       - attach_workspace:
           at: dist
       - run:
-          name: fake deploy
-          command: 'ls -ltr dist'
-      - run:
           name: sign packages
           command: './scripts/build/sign_packages.sh'
       - run:
           name: sha-sum packages
           command: 'go run build.go sha-dist'
+      - persist_to_workspace:
+          root: dist
+          paths:
+            - grafana*
+  deploy:
+    docker:
+      - image: circleci/python:2.7-stretch
+    working_directory: /go/src/github.com/grafana/grafana
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - run:
+          name: install awscli
+          command: 'sudo pip install awscli'
+      - run:
+          name: fake deploy
+          command: 'ls -ltr dist'
+
 #      - run:
 #          name: deploy to s3
 #          command: 'aws s3 sync ./dist s3://$BUCKET_NAME/master'
@@ -81,8 +97,11 @@ workflows:
       - test-frontend
       - test-backend
       - build
-      - deploy:
+      - sign-packages:
           requires:
             - test-frontend
             - test-backend
             - build
+      - deploy:
+          requires:
+            - sign-packages
