@@ -49,6 +49,7 @@ jobs:
           paths:
             - grafana*
 
+# this is for branches
   deploy:
     docker:
      - image: grafana/build-container:v0.1
@@ -60,6 +61,18 @@ jobs:
       - run:
           name: fake deploy
           command: 'ls -ltr dist'
+      - run:
+          name: sign packages
+          command: './scripts/build/sign_packages.sh'
+      - run:
+          name: sha-sum packages
+          command: 'go run build.go sha-dist'
+#      - run:
+#          name: deploy to s3
+#          command: 'aws s3 sync ./dist s3://$BUCKET_NAME/master'
+# windows build trigger
+# docker build trigger
+#publish to grafanacom
 
 workflows:
   version: 2
