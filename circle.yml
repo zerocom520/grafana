@@ -13,6 +13,7 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ checksum "yarn.lock" }}
 
+      # Could we skip this step if the cache has been restored? `[ -d node_modules ] || yarn install ...` should be able to apply to build step as well
       - run:
           name: yarn install
           command: 'yarn install --pure-lockfile --no-progress'
