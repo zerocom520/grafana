@@ -9,6 +9,7 @@ import (
 	"github.com/grafana/grafana/pkg/components/simplejson"
 	"github.com/grafana/grafana/pkg/log"
 	m "github.com/grafana/grafana/pkg/models"
+	"strings"
 )
 
 type DashAlertExtractor struct {
@@ -49,11 +50,17 @@ func (e *DashAlertExtractor) lookupDatasourceId(dsName string) (*m.DataSource, e
 	return nil, errors.New("Could not find datasource id for " + dsName)
 }
 
-func findPanelQueryByRefId(panel *simplejson.Json, refId string) *simplejson.Json {
+func findPanelQueryByRefId(panel *simplejson.Json, refId string, templateMap map[string]string) *simplejson.Json {
 	for _, targetsObj := range panel.Get("targets").MustArray() {
 		target := simplejson.NewFromAny(targetsObj)
 
 		if target.Get("refId").MustString() == refId {
+			targetMap := target.MustMap();
+			for k, v := range targetMap {
+				if strings.Index(v.(string), "$") == 0 {
+					target.Set(k, templateMap[k])
+				}
+			}
 			return target
 		}
 	}
@@ -72,6 +79,19 @@ func copyJson(in *simplejson.Json) (*simplejson.Json, error) {
 func (e *DashAlertExtractor) GetAlertFromPanels(jsonWithPanels *simplejson.Json) ([]*m.Alert, error) {
 	alerts := make([]*m.Alert, 0)
 
+	templatingJson, hasTemplating := jsonWithPanels.CheckGet("templating");
+
+	var m1 map[string] string;
+	m1 = make(map[string] string);
+	if hasTemplating {
+		for _, templateObj := range templatingJson.Get("list").MustArray() {
+			template := simplejson.NewFromAny(templateObj);
+			key := template.Get("name").MustString();
+			option := simplejson.NewFromAny(template.Get("options").MustArray()[0]);
+			value := option.Get("value").MustString();
+			m1[key] = value;
+		}
+	}
 	for _, panelObj := range jsonWithPanels.Get("panels").MustArray() {
 		panel := simplejson.NewFromAny(panelObj)
 		jsonAlert, hasAlert := panel.CheckGet("alert")
@@ -112,7 +132,7 @@ func (e *DashAlertExtractor) GetAlertFromPanels(jsonWithPanels *simplejson.Json)
 
 			jsonQuery := jsonCondition.Get("query")
 			queryRefId := jsonQuery.Get("params").MustArray()[0].(string)
-			panelQuery := findPanelQueryByRefId(panel, queryRefId)
+			panelQuery := findPanelQueryByRefId(panel, queryRefId, m1)
 
 			if panelQuery == nil {
 				reason := fmt.Sprintf("Alert on PanelId: %v refers to query(%s) that cannot be found", alert.PanelId, queryRefId)
